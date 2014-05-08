@@ -59,8 +59,8 @@ function move() {
 	    xVel /= 2;
 	    yVel /= 2;
 	    zPos = maxSize;
-	    pScore = document.getElementById('playerScore');
-	    pScore.innerHTML = (parseInt(pScore.innerHTML) + 1);
+	    cScore = document.getElementById('computerScore');
+	    cScore.innerHTML = (parseInt(cScore.innerHTML) + 1);
 	}
     }
     if(xPos < 0) {
@@ -72,31 +72,39 @@ function move() {
 	yVel *= -1;
     }    
     if(zPos < 0) {
-	zVel -= (Math.random() * .3);
-	zVel *= -1;
+	if((xPos > (compPos.x - 50)) && (xPos < (compPos.x + 50))){
+	    if((yPos > (compPos.y - 50)) && (yPos < (compPos.y + 50))){
+		zVel -= (Math.random() * .3);
+		zVel *= -1;
+	    }
+	}
+	else {
+	    zVel /= -2;
+	    xVel /= 2;
+	    yVel /= 2;
+	    zPos = 0;
+	    pScore = document.getElementById('playerScore');
+	    pScore.innerHTML = (parseInt(pScore.innerHTML) + 1);
+	}
     }
-    
+
+    drawBG(); //Background
     //Draw Computer
     ctx.fillStyle = "rgba(150,0,0,.5)";
-    ctx.fillRect(compPos.x-25, compPos.y-25, 50, 50);
+    ctx.fillRect((compPos.x/2+maxSize/4)-25, (compPos.y/2+maxSize/4)-25, 50, 50);
+
     //Draw Ball
+    newXPos = ((xPos/maxSize)*((1/2)+((zPos/maxSize)/2)) + (1/4)*((maxSize-zPos)/maxSize))*maxSize;
+    newYPos = ((yPos/maxSize)*((1/2)+((zPos/maxSize)/2)) + (1/4)*((maxSize-zPos)/maxSize))*maxSize;
+
     ctx.fillStyle = "rgba(0,200,0,.5)";
     ctx.beginPath();
     var size = parseInt(zPos/20 + 10);
-    ctx.arc(xPos, yPos, size, 0, 2*Math.PI);
+    ctx.arc(newXPos, newYPos, size, 0, 2*Math.PI);
     ctx.fill();
     //Draw Player
     ctx.fillStyle = "rgba(0,0,150,.5)";
     ctx.fillRect(mousePos.x-50, mousePos.y-50, 100, 100);
-    //Check for top
-    if(zPos > (maxSize - 10)) {
-	ctx.arc(xPos, yPos, (size+1), 0, 2*Math.PI);
-	ctx.stroke();
-    }
-    if(zPos < 10) {
-	ctx.arc(xPos, yPos, size, 0, 2*Math.PI);
-	ctx.stroke();
-    }
 }
 
 //Move the computer
@@ -113,4 +121,25 @@ function compMove() {
     else {
 	compPos.y += compVel;
     }
+}
+
+//Draw the Background
+function drawBG() {
+    ctx.strokeRect(maxSize/4, maxSize/4, maxSize/2, maxSize/2);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(maxSize/4, maxSize/4);
+    ctx.stroke();
+    ctx.moveTo(maxSize, 0);
+    ctx.lineTo(maxSize*3/4, maxSize/4);
+    ctx.stroke();
+    ctx.moveTo(0, maxSize);
+    ctx.lineTo(maxSize/4, maxSize*3/4);
+    ctx.stroke();
+    ctx.moveTo(maxSize, maxSize);
+    ctx.lineTo(maxSize*3/4, maxSize*3/4);
+    ctx.stroke();
+    
+    //Moving Depth Box
+    ctx.strokeRect((maxSize-zPos)/4, (maxSize-zPos)/4, maxSize-(maxSize-zPos)/2, maxSize-(maxSize-zPos)/2);
 }
