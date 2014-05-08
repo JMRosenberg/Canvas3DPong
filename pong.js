@@ -97,7 +97,7 @@ function move() {
     newXPos = ((xPos/maxSize)*((1/2)+((zPos/maxSize)/2)) + (1/4)*((maxSize-zPos)/maxSize))*maxSize;
     newYPos = ((yPos/maxSize)*((1/2)+((zPos/maxSize)/2)) + (1/4)*((maxSize-zPos)/maxSize))*maxSize;
 
-    ctx.fillStyle = "rgba(0,200,0,.5)";
+    ctx.fillStyle = "rgba(0,200,0,.8)";
     ctx.beginPath();
     var size = parseInt(zPos/20 + 10);
     ctx.arc(newXPos, newYPos, size, 0, 2*Math.PI);
@@ -121,10 +121,26 @@ function compMove() {
     else {
 	compPos.y += compVel;
     }
+    if(compPos.x < 50) {
+	compPos.x = 50;
+    }
+    if(compPos.x > (maxSize - 50)) {
+	compPos.x = maxSize - 50;
+    }
+    if(compPos.y < 50) {
+	compPos.y = 50;
+    }
+    if(compPos.y > (maxSize - 50)) {
+	compPos.y = maxSize - 50;
+    }
 }
 
 //Draw the Background
 function drawBG() {
+    ctx.fillStyle = "rgb(200,200,200)";
+    ctx.fillRect(0, 0, maxSize, maxSize);
+    ctx.fillStyle = "rgb(150,150,150)";
+    ctx.fillRect(maxSize/4, maxSize/4, maxSize/2, maxSize/2);
     ctx.strokeRect(maxSize/4, maxSize/4, maxSize/2, maxSize/2);
     ctx.beginPath();
     ctx.moveTo(0, 0);
