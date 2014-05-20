@@ -7,6 +7,13 @@ var yVel = Math.random() * 2 - 1;
 var zVel = Math.random() * .5 + .5;
 var compVel = .9;
 
+var maxX = 2;
+var maxY = 2;
+var maxZ = 2;
+var minX = .2;
+var minY = .2;
+var minZ = .5;
+
 var canvas = document.getElementById('myCanvas');
 var mousePos = {x: maxSize/2, y: maxSize/2};
 var compPos = {x: maxSize/2, y: maxSize/2};
@@ -15,7 +22,7 @@ var compPos = {x: maxSize/2, y: maxSize/2};
 function start() {
     canvas = document.getElementById('myCanvas');
     if(canvas.getContext) {
-	ctx = canvas.getContext('2d');
+      ctx = canvas.getContext('2d');
     }
     canvas.onmousemove = handleMouseMove;
     myInt = setInterval(move, 2);
@@ -36,15 +43,16 @@ function handleMouseMove(event) {
 function move() {
     ctx.clearRect(0, 0, maxSize, maxSize);
     compMove();
+    checkMax();
     xPos += xVel;
     yPos += yVel;
     zPos += zVel;
     if(xPos > maxSize) {
-	xVel += (Math.random() * .3); 
+	xVel += (Math.random() * .4 - .1);
 	xVel *= -1;
     }
     if(yPos > maxSize) {
-	yVel += (Math.random() * .3);
+	yVel += (Math.random() * .4 - .1);
 	yVel *= -1;
     }
     if(zPos > maxSize) {
@@ -70,7 +78,7 @@ function move() {
     if(yPos < 0) {
 	yVel -= (Math.random() * .3);
 	yVel *= -1;
-    }    
+    }
     if(zPos < 0) {
 	if((xPos > (compPos.x - 50)) && (xPos < (compPos.x + 50))){
 	    if((yPos > (compPos.y - 50)) && (yPos < (compPos.y + 50))){
@@ -105,6 +113,29 @@ function move() {
     //Draw Player
     ctx.fillStyle = "rgba(0,0,150,.5)";
     ctx.fillRect(mousePos.x-50, mousePos.y-50, 100, 100);
+}
+
+//Checks maximal and minimal velocity
+function checkMax() {
+    var positive = (xVel > 0);
+    if(xVel > maxX) {
+	xVel = maxX;
+    }
+    else if(xVel < minX) {
+	xVel = minX;
+    }
+/*    if(yVel > maxY) {
+	yVel = maxY;
+    }
+    else if(yVel < minY) {
+	yVel = minY;
+    }
+    if(zVel > maxZ) {
+	zVel = maxZ;
+    }
+    else if(xVel < minX) {
+	xVel = minX;
+    }    */
 }
 
 //Move the computer
@@ -155,7 +186,7 @@ function drawBG() {
     ctx.moveTo(maxSize, maxSize);
     ctx.lineTo(maxSize*3/4, maxSize*3/4);
     ctx.stroke();
-    
+
     //Moving Depth Box
     ctx.strokeRect((maxSize-zPos)/4, (maxSize-zPos)/4, maxSize-(maxSize-zPos)/2, maxSize-(maxSize-zPos)/2);
 }
