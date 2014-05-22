@@ -18,6 +18,10 @@ var canvas = document.getElementById('myCanvas');
 var mousePos = {x: maxSize/2, y: maxSize/2};
 var compPos = {x: maxSize/2, y: maxSize/2};
 
+var pScore = document.getElementById('playerScore');
+var cScore = document.getElementById('computerScore');
+var scoreDiv = document.getElementById('scores');
+
 //Initialize the game
 function start() {
     canvas = document.getElementById('myCanvas');
@@ -37,7 +41,6 @@ function handleMouseMove(event) {
 	y: event.clientY - rect.top
     };
 }
-
 
 //To Do: Break up this function into reasonable parts
 function move() {
@@ -69,6 +72,9 @@ function move() {
 	    yVel /= 2;
 	    zPos = maxSize;
 	    cScore = document.getElementById('computerScore');
+	    scoreDiv = document.getElementById('scores');
+	    scoreDiv.style.background = '#FF0000';
+	    window.setTimeout("clearBGColor()", 1000);
 	    cScore.innerHTML = (parseInt(cScore.innerHTML) + 1);
 	}
     }
@@ -93,6 +99,9 @@ function move() {
 	    yVel /= 2;
 	    zPos = 0;
 	    pScore = document.getElementById('playerScore');
+	    scoreDiv = document.getElementById('scores');
+	    scoreDiv.style.background = '#0066FF';
+	    window.setTimeout("clearBGColor()", 1000);
 	    pScore.innerHTML = (parseInt(pScore.innerHTML) + 1);
 	}
     }
@@ -208,17 +217,22 @@ function drawBG() {
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(maxSize/4, maxSize/4);
-    ctx.stroke();
+    //ctx.stroke();
     ctx.moveTo(maxSize, 0);
     ctx.lineTo(maxSize*3/4, maxSize/4);
-    ctx.stroke();
+    //ctx.stroke();
     ctx.moveTo(0, maxSize);
     ctx.lineTo(maxSize/4, maxSize*3/4);
-    ctx.stroke();
+    //ctx.stroke();
     ctx.moveTo(maxSize, maxSize);
     ctx.lineTo(maxSize*3/4, maxSize*3/4);
     ctx.stroke();
 
     //Moving Depth Box
     ctx.strokeRect((maxSize-zPos)/4, (maxSize-zPos)/4, maxSize-(maxSize-zPos)/2, maxSize-(maxSize-zPos)/2);
+}
+
+function clearBGColor() {
+    scoreDiv = document.getElementById('scores');
+    scoreDiv.style.background = '#FFFFFF';
 }
