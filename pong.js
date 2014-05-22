@@ -7,9 +7,9 @@ var yVel = Math.random() * 2 - 1;
 var zVel = Math.random() * .5 + .5;
 var compVel = .9;
 
-var maxX = 2;
-var maxY = 2;
-var maxZ = 2;
+var maxX = 4;
+var maxY = 4;
+var maxZ = 4;
 var minX = .2;
 var minY = .2;
 var minZ = .5;
@@ -47,11 +47,12 @@ function move() {
     xPos += xVel;
     yPos += yVel;
     zPos += zVel;
-    if(xPos > maxSize) {
+    var size = parseInt(zPos/20 + 10);
+    if(xPos > (maxSize-size)) {
 	xVel += (Math.random() * .4 - .1);
 	xVel *= -1;
     }
-    if(yPos > maxSize) {
+    if(yPos > (maxSize-size)) {
 	yVel += (Math.random() * .4 - .1);
 	yVel *= -1;
     }
@@ -71,11 +72,11 @@ function move() {
 	    cScore.innerHTML = (parseInt(cScore.innerHTML) + 1);
 	}
     }
-    if(xPos < 0) {
+    if(xPos < size) {
 	xVel -= (Math.random() * .3);
 	xVel *= -1;
     }
-    if(yPos < 0) {
+    if(yPos < size) {
 	yVel -= (Math.random() * .3);
 	yVel *= -1;
     }
@@ -107,7 +108,6 @@ function move() {
 
     ctx.fillStyle = "rgba(0,200,0,.8)";
     ctx.beginPath();
-    var size = parseInt(zPos/20 + 10);
     ctx.arc(newXPos, newYPos, size, 0, 2*Math.PI);
     ctx.fill();
     //Draw Player
@@ -117,25 +117,57 @@ function move() {
 
 //Checks maximal and minimal velocity
 function checkMax() {
-    var positive = (xVel > 0);
-    if(xVel > maxX) {
-	xVel = maxX;
+    // X
+    if(xVel > 0) {
+	if(xVel > maxX) {
+	    xVel = maxX;
+	}
+	else if(xVel < minX) {
+	    xVel = minX;
+	}
     }
-    else if(xVel < minX) {
-	xVel = minX;
+    else if(xVel < 0) {
+	if(xVel < (-1*maxX)) {
+	    xVel = (-1*maxX);
+	}
+	else if(xVel > (-1*minX)) {
+	    xVel = (-1*minX);
+	}
     }
-/*    if(yVel > maxY) {
-	yVel = maxY;
+    // Y
+    if(yVel > 0) {
+	if(yVel > maxY) {
+	    yVel = maxY;
+	}
+	else if(yVel < minY) {
+	    yVel = minY;
+	}
     }
-    else if(yVel < minY) {
-	yVel = minY;
+    else if(yVel < 0) {
+	if(yVel < (-1*maxY)) {
+	    yVel = (-1*maxY);
+	}
+	else if(yVel > (-1*minY)) {
+	    yVel = (-1*minY);
+	}
     }
-    if(zVel > maxZ) {
-	zVel = maxZ;
+    // Z
+    if(zVel > 0) {
+	if(zVel > maxZ) {
+	    zVel = maxZ;
+	}
+	else if(zVel < minZ) {
+	    zVel = minZ;
+	}
     }
-    else if(xVel < minX) {
-	xVel = minX;
-    }    */
+    else if(zVel < 0) {
+	if(zVel < (-1*maxZ)) {
+	    zVel = (-1*maxZ);
+	}
+	else if(zVel > (-1*minZ)) {
+	    zVel = (-1*minZ);
+	}
+    }
 }
 
 //Move the computer
